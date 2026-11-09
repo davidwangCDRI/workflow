@@ -1,0 +1,17 @@
+name: Test Python
+
+on: [push, pull_request]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: 檢查輸出
+        run: |
+          python -c 'import subprocess, sys; r = subprocess.run([sys.executable, "hello.py"], capture_output=True, text=True); assert r.returncode == 0, r.stderr; assert r.stdout == "Hello World!\n", repr(r.stdout)'
