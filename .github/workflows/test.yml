@@ -1,0 +1,26 @@
+name: Test Python
+
+on: [push, pull_request, workflow_dispatch]
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Verify hello.py output
+        run: |
+          python - <<'PY'
+          import subprocess
+          import sys
+
+          result = subprocess.run([sys.executable, "hello.py"], capture_output=True, text=True)
+          assert result.returncode == 0, result.stderr
+          assert result.stdout == "hello taipei\n", repr(result.stdout)
+          print("Test passed")
+          PY
